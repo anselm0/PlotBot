@@ -52,6 +52,7 @@ def mention_checker():
                 
                 if mention["entities"]["user_mentions"][1]["screen_name"] in mention_list:
                     print ("This has already been Analyzed, here is the plot: return stored plot here")
+                    break
                 else:
                     analyze_term = "@" + mention["entities"]["user_mentions"][1]["screen_name"]
                     tweet_author = mention["user"]["screen_name"]
