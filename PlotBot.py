@@ -85,13 +85,12 @@ def plot_create(dataframe):
     #replace with savefig to tweet out
     plot_name = analyze_term + "_plot.jpg"
     plt.savefig(plot_name)
-    
+
     #tweet the figure out
     api.update_with_media(plot_name, 
-                          f"New Tweet Analysis {analyze_term}: Thank you @{tweet_author}!")
+                          "New Tweet Analysis {}: Thank you @{}!".format(analyze_term, tweet_author))
     
     #plt.show()
-
 
 # In[107]:
 
@@ -156,7 +155,7 @@ def clear_sentiments():
 
 
 # Set timer to run every minute for 5 minutes max
-t_end = time.time() + (60 * 5)
+t_end = time.time() + (60 * 60)
 
 while time.time() < t_end:
     last_id, tweet_author, analyze_term = mention_checker()
