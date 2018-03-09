@@ -130,11 +130,11 @@ def clear_sentiments():
     return
 
 # Set timer to run every minute for 5 minutes max
-t_end = time.time() + (60 * 5)
+#t_end = time.time() + (60 * 5)
 
-while time.time() < t_end:
-    #mention_checker()
-    PlotBot()
-    clear_sentiments()
-    time.sleep(30)
+#while time.time() < t_end:
+#mention_checker()
+PlotBot()
+clear_sentiments()
+time.sleep(60)
 
