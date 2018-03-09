@@ -1,3 +1,6 @@
+
+
+```python
 import tweepy
 import pandas as pd
 import json
@@ -138,3 +141,5 @@ while time.time() < t_end:
     clear_sentiments()
     time.sleep(60)
 
+
+```
