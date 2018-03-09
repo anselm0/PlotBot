@@ -1,9 +1,8 @@
 import tweepy
 import pandas as pd
-import json
+#import json
 import config
 import time
-import Tkinter
 import matplotlib.pyplot as plt
 
 
