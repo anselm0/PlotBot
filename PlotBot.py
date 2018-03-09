@@ -3,7 +3,9 @@ import pandas as pd
 import json
 import config
 import time
+import Tkinter
 import matplotlib.pyplot as plt
+
 
 # Setup Tweepy API Authentication
 auth = tweepy.OAuthHandler(config.consumer_key, config.consumer_secret)
