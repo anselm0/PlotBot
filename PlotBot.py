@@ -3,6 +3,8 @@ import pandas as pd
 import json
 import config
 import time
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 # Setup Tweepy API Authentication
