@@ -1,3 +1,4 @@
+python==3.6.3
 tweepy==3.5.0
 pandas==0.18.1
 matplotlib==2.2.0

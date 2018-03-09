@@ -1,10 +1,9 @@
 import tweepy
 import pandas as pd
-#import json
+import json
 import config
 import time
 import matplotlib.pyplot as plt
-
 
 # Setup Tweepy API Authentication
 auth = tweepy.OAuthHandler(config.consumer_key, config.consumer_secret)
@@ -20,7 +19,7 @@ compound_list = []
 positive_list = []
 negative_list = []
 neutral_list = []
-#mention_list = []
+mention_list = []
           
 
 #plot the results function to call in PlotBot   
