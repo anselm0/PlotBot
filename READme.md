@@ -1,12 +1,7 @@
-
-
-```python
 import tweepy
-import requests as req
 import pandas as pd
 import json
 import config
-import numpy as np
 import time
 import matplotlib.pyplot as plt
 
@@ -24,77 +19,65 @@ compound_list = []
 positive_list = []
 negative_list = []
 neutral_list = []
+#mention_list = []
+          
 
-mention_list = []
-```
-
-
-```python
-def mention_checker():
-        
-    """function checks to see when most recent tweet was directed to account, then extract
-    the new target phrase to graph"""
-    
-    #search for the most recent tweet directed to account
-    mentions = api.mentions_timeline(count = 1)
-    
-    try:
-
-        for mention in mentions:
-            #print(json.dumps(mention, sort_keys=True, indent=4, separators=(',', ': ')))
-
-            #check to see if index value with second mention exists
-            if len(mention["entities"]["user_mentions"]) == 2:
-                
-                if mention["entities"]["user_mentions"][1]["screen_name"] in mention_list:
-                    print ("This has already been Analyzed, here is the plot: return stored plot here")
-                else:
-                    analyze_term = "@" + mention["entities"]["user_mentions"][1]["screen_name"]
-                    tweet_author = mention["user"]["screen_name"]
-                    last_id = mention["id"]
-                    mention_list.append(analyze_term)
-
-                    return (last_id, tweet_author, analyze_term)
-            else:
-                tweet_author = mention["user"]["screen_name"]
-                print("You were mentioned by @" + tweet_author +", but no new requests for PlotBot")
-                
-                continue
-        
-    except Exception:
-        print ("No new mention.")                
-    
-
-```
-
-
-```python
 #plot the results function to call in PlotBot   
-def plot_create(dataframe):
+def plot_create(dataframe, term, author):
     plt.plot(dataframe.index, dataframe["Compound"], marker="o", alpha=.5 )
     plt.xlim(500, 0)
     plt.ylim(-1,1)
     plt.grid(linestyle='--')
     plt.xlabel("Tweets Ago")
     plt.ylabel("Tweet Polarity")
-    plt.title("Sentiment Analysis of " + analyze_term + " Tweets")
+    plt.title("Sentiment Analysis of " + term + " Tweets")
     #replace with savefig to tweet out
-    plot_name = analyze_term + "_plot.jpg"
+    plot_name = term + "_plot.jpg"
     plt.savefig(plot_name)
-    
+
     #tweet the figure out
     api.update_with_media(plot_name, 
-                          f"New Tweet Analysis {analyze_term}: Thank you @{tweet_author}!")
+                          "New Tweet Analysis {}: Thank you @{}!".format(term, author))
     
     #plt.show()
 
-```
+    return
 
-
-```python
-def PlotBot(target_term):
+def PlotBot():
     
+    #target_term = ""
+
     """Search for mentions of @anselm0_jr, then extract the target_term to analyze, graph, and retweet"""
+    #search for the most recent tweet directed to account
+    mentions = api.mentions_timeline(count = 1)
+    for mention in mentions:
+        #print(json.dumps(mention, sort_keys=True, indent=4, separators=(',', ': ')))
+        #check to see if index value with second mention exists
+        if len(mention["entities"]["user_mentions"]) == 2:
+                        
+            if mention["id"] in mention_list:
+                    
+                print ("No new mentions.")
+                            
+                return
+                        
+            else:
+                target_term = "@" + mention["entities"]["user_mentions"][1]["screen_name"]
+                tweet_author = mention["user"]["screen_name"]
+                #last_id = mention["id"]
+                mention_list.append(mention["id"])
+                print ("Plotted {} and Tweeted {} Successfully".format(target_term, tweet_author))
+            
+                break
+    
+        else:
+            tweet_author = mention["user"]["screen_name"]
+        
+            print("You were mentioned by @" + tweet_author +", but no new requests for PlotBot")
+                
+            return
+
+    #break
     
     oldest_tweet = ""
     
@@ -134,27 +117,24 @@ def PlotBot(target_term):
             # Reassign the the oldest tweet (i.e. the max_id)
             oldest_tweet = tweet["id_str"]
                     
-    return plot_create(sent_df)
+    return plot_create(sent_df, target_term, tweet_author)
     
-```
 
 
-```python
 def clear_sentiments():
-    compound_list = []
-    positive_list = []
-    negative_list = []
-    neutral_list = []
-```
+    del compound_list[:]
+    del positive_list[:]
+    del negative_list[:]
+    del neutral_list[:]
+    
+    return
 
-
-```python
 # Set timer to run every minute for 5 minutes max
-t_end = time.time() + (60 * 5)
+t_end = time.time() + (60 * 60)
 
 while time.time() < t_end:
-    last_id, tweet_author, analyze_term = mention_checker()
-    PlotBot(analyze_term)
+    #mention_checker()
+    PlotBot()
     clear_sentiments()
     time.sleep(60)
-```
+
