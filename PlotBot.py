@@ -21,8 +21,7 @@ compound_list = []
 positive_list = []
 negative_list = []
 neutral_list = []
-mention_list = []
-          
+mention_list = []          
 
 #plot the results function to call in PlotBot   
 def plot_create(dataframe, term, author):
@@ -40,6 +39,9 @@ def plot_create(dataframe, term, author):
     #tweet the figure out
     api.update_with_media(plot_name, 
                           "New Tweet Analysis {}: Thank you @{}!".format(term, author))
+    
+    print ("Plotted {} and Tweeted {} Successfully".format(term, author))
+
     
     #plt.show()
 
@@ -68,7 +70,6 @@ def PlotBot():
                 tweet_author = mention["user"]["screen_name"]
                 #last_id = mention["id"]
                 mention_list.append(mention["id"])
-                print ("Plotted {} and Tweeted {} Successfully".format(target_term, tweet_author))
             
                 break
     
@@ -82,6 +83,7 @@ def PlotBot():
     #break
     
     oldest_tweet = ""
+    sent_df = None
     
     #search for the most recent 500 tweets directed to account
     for x in range(5):
@@ -112,6 +114,8 @@ def PlotBot():
                          "Positive": positive_list,
                          "Neutral": negative_list,
                          "Negative": neutral_list}
+            
+            sent_df = None
         
             sent_df = pd.DataFrame.from_dict(sentiment).sort_index(ascending=False)
             
